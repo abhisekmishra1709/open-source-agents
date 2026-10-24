@@ -4,6 +4,25 @@
 
 ---
 
+## Demo
+
+Screenshots from a live run of `npm run web` (ADK dev UI, `gemini-flash-lite-latest`) on the sample data.
+
+**Investigating alert ALT-0006.** The agent calls `get_alert_case`, recommends `ESCALATE`, and cites only real transaction IDs:
+- a ₹10 lakh deposit, 90% of which was wired to the UAE and Iran within 48 hours
+- a DRAFT STR narrative that uses the masked customer name only
+
+![Gemini investigation of alert ALT-0006 in the ADK web UI](docs/web-investigation.png)
+
+**The case file the model receives** (shown by clicking the tool call):
+- the rule explanation and the enforced `minimumRecommendation: "ESCALATE"`
+- KYC context with the name masked (`K****** S*****`)
+- no email, phone number or date of birth
+
+![get_alert_case tool response showing masked PII and the minimum recommendation](docs/web-case-file.png)
+
+---
+
 ## Overview
 
 ### Problem Statement & Intended Users

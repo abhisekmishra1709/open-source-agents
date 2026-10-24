@@ -12,7 +12,8 @@
     "review": "tsx src/cli.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "chat": "adk run src/agent.ts"
+    "chat": "adk run src/agent.ts",
+    "web": "adk web src/agent.ts"
   },
   "dependencies": {
     "@google/adk": "^2.3.0",

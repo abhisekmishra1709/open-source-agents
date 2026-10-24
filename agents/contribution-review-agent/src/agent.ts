@@ -64,7 +64,8 @@ const listProjectFiles = new FunctionTool({
 
 export const rootAgent = new LlmAgent({
   name: 'contribution_review_agent',
-  model: process.env.MODEL_NAME ?? 'gemini-2.5-flash',
+  // The -latest alias survives model retirements; a pinned version (gemini-2.5-flash) started returning 404.
+  model: process.env.MODEL_NAME ?? 'gemini-flash-lite-latest',
   description: 'Reviews submissions to the open-source-agents repository.',
   instruction: `You review contributions to the open-source-agents community repository.
 The user gives you a target: a local project folder or a GitHub pull request URL.

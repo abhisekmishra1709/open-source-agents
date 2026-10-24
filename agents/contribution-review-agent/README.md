@@ -4,6 +4,22 @@
 
 ---
 
+## Demo
+
+This screenshot is from a live run of `npm run web` (ADK dev UI, `gemini-flash-lite-latest`). The agent was asked to review the repository's own `template/` folder.
+
+1. It called all three tools at once: `run_compliance_checks`, `read_project_readme` and `list_project_files`.
+2. It returned a review grounded in what the tools found:
+   - the folder is in the wrong place
+   - the dependency manifest is missing
+   - 9 template placeholders were left in the README
+
+![Gemini reviewing the template folder in the ADK web UI](docs/web-template-review.png)
+
+> The web UI shows only Gemini's review. `npm run review` also prints the scored rule-check report (see *Example Input & Output*).
+
+---
+
 ## Overview
 
 ### Problem Statement & Intended Users
@@ -25,7 +41,7 @@
 
 - **Language & Runtime**: TypeScript on Node.js 20.19+, run with `tsx` (no build step)
 - **Agent Framework / Core Library**: Google Agent Development Kit for TypeScript (`@google/adk`), with tool parameters defined in `zod`
-- **Models**: Gemini 2.5 Flash by default (configurable through `MODEL_NAME`)
+- **Models**: `gemini-flash-lite-latest` by default (configurable through `MODEL_NAME`)
 - **External APIs / Tools**: GitHub REST API (PR mode only), `git` CLI (local mode)
 - **Testing**: `vitest`
 
@@ -38,7 +54,7 @@ flowchart LR
   U["CLI: folder path or PR URL"] --> S["Source loader<br/>git ls-files / GitHub API"]
   S --> C["Rule checks<br/>structure · secrets · README · scope"]
   C --> R["Scored report<br/>score, verdict, findings"]
-  U -->|unless --no-llm| A["ADK LlmAgent<br/>Gemini 2.5 Flash"]
+  U -->|unless --no-llm| A["ADK LlmAgent<br/>Gemini Flash-Lite"]
   A -->|tool call| T1[run_compliance_checks]
   A -->|tool call| T2[read_project_readme]
   A -->|tool call| T3[list_project_files]
@@ -89,7 +105,7 @@ flowchart LR
 | Variable Name | Required | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `GEMINI_API_KEY` | For AI review | *None* | Gemini API key. Not needed with `--no-llm`. |
-| `MODEL_NAME` | No | `gemini-2.5-flash` | Gemini model used by the agent. |
+| `MODEL_NAME` | No | `gemini-flash-lite-latest` | Gemini model used by the agent. The `-latest` alias keeps working when specific versions are retired. |
 | `GITHUB_TOKEN` | No | *None* | Raises the GitHub API rate limit (60 to 5,000 requests per hour) in PR mode. No scopes are needed for public repositories. |
 | `GOOGLE_GENAI_USE_VERTEXAI` | No | *None* | Set to `1` to use Vertex AI instead of an API key. This also requires `GOOGLE_CLOUD_PROJECT` and `GOOGLE_CLOUD_LOCATION`. |
 
@@ -114,6 +130,9 @@ npm run review -- . --json --out review.json
 
 # Chat with the agent interactively through the ADK dev CLI
 npm run chat
+
+# Browser UI at http://localhost:8000 (shows each tool call)
+npm run web
 ```
 
 Exit codes:

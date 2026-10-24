@@ -12,6 +12,7 @@
     "check": "tsx src/cli.ts",
     "eval": "tsx src/eval.ts",
     "chat": "adk run src/agent.ts",
+    "web": "adk web src/agent.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
